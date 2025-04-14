@@ -1,0 +1,16 @@
+{
+  "name": "integrador_web2_2025",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+  },
+  "keywords": [],
+  "author": "Brayan Lucero",
+  "license": "ISC",
+  "description": "Trabajo práctico integrador de programación web 2",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

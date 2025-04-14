@@ -1,0 +1,31 @@
+
+.menu {
+    background-color:lightskyblue;
+    text-align: center;
+}
+
+.bandera {
+    height: 100px;
+    width: 100px;
+}
+
+.botones {
+    background-color:orange;
+    border-radius: 50px;
+    height: 30px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.contenidoPrincipal {
+    padding: 20px;
+    border-radius: 50px;
+}
+
+.botonesRespuesta {
+    margin: 10px;
+    width: 50%;
+    background-color: darkblue;
+    color: #ffffff;
+    border-radius: 50px;
+}
