@@ -9,9 +9,21 @@ export function nombrar() {
 
     function eventoEmpezar() {
         if (interfaz.campoNombre.value.trim() !== "") {
-            empezarPartida();
+            const nombreJugador = interfaz.campoNombre.value.trim();
             
             //Agregar fetch para cargar el nombre en al back;
+            fetch("http://localhost:3000/", {
+                method: "POST",
+                headers: {
+                    "Operacion": "guardarNombre",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nombre: nombreJugador
+                })
+            });
+
+            empezarPartida();
         };
     };
 };
