@@ -1,15 +1,24 @@
 import {crearInterfazDeJuego} from "./interfaces.js";
+import {mostrarResultados} from "./resultadosFront.js";
 
-let interfaz = {};
-const paisesOpcion = [];
-const paisesEnUso = [];
 const preguntas = obtenerPreguntas();
 const cantidadDePreguntas = 10;
+const paisesOpcion = [];
+
+let interfaz = {};
+let paisesEnUso = [];
 let sinContestar = false; 
+let tipoDePregunta;
 
-// FUNCIONES PRINCIPALES
+let puntaje = [];
+let tiempos = [];
+let tiempo;
+let nombre;
 
-export function empezarPartida() {
+// #region FUNCIONES PRINCIPALES
+
+export function empezarPartida(nombreJugador) {
+    nombre = nombreJugador;
     interfaz = crearInterfazDeJuego();
     preguntar();
     interfaz.siguiente.addEventListener("click", preguntar);
@@ -21,20 +30,26 @@ export function prepararPartida() {
 }
 
 function preguntar() {
-    if (!sinContestar) preguntas.next();
+    if (!sinContestar) {
+        const pregunta = preguntas.next();
+        tiempo = Date.now();
+
+        if (pregunta.done) {
+            mostrarResultados(nombre, tiempos, puntaje);
+        };
+    };
 }
 
+// #endregion
 
-// OBTENCIÓN DE DATOS
+// #region OBTENCIÓN DE DATOS
 
 function *obtenerPreguntas () {
-    const tipoDePregunta = obtenerTipoDePregunta();
+    const tdp = obtenerTipoDePregunta();
 
     for (let i=0; i<cantidadDePreguntas; i++) {
-        const tipo = tipoDePregunta.next().value;
-
-        cargarPregunta(tipo);
-
+        tipoDePregunta = tdp.next().value;
+        cargarPregunta(tipoDePregunta);
         yield true;
     }
 }
@@ -100,8 +115,9 @@ function seleccionarSubRegiones (cantidadDePreguntas) {
     return sgs;
 }
 
+// #endregion
 
-// CARGA DE PREGUNTAS EN LA INTERFAZ
+// #region CARGA DE PREGUNTAS EN LA INTERFAZ
 
 function cargarPregunta (tipoDePregunta) {
     switch (tipoDePregunta) {
@@ -161,7 +177,9 @@ function preguntaPaisesLimitrofes() {
     cargarRespuestas(paises, 2);
 }
 
-// CARGA DE RESPUESTAS EN LA INTERFAZ
+// #endregion
+
+// #region CARGA DE RESPUESTAS EN LA INTERFAZ
 
 function cargarRespuestas (paises, tipoDeRespuesta) {
     switch (tipoDeRespuesta) {
@@ -225,11 +243,23 @@ function restablecerRespuestas() {
     for (const boton of interfaz.divRespuestas.childNodes) {
         boton.removeEventListener("click", respuestaCorrecta);
         boton.removeEventListener("click", respuestaIncorrecta);
-        boton.style.backgroundColor = "darkblue";
+        boton.style["backgroundColor"] = "darkblue";
         boton.disabled = false;
 
         sinContestar = true;
     };
+}
+
+// #endregion
+
+// #region EVALUACIÓN DE RESPUESTAS
+
+function puntuar() {
+    switch (tipoDePregunta) {
+        case 1: puntaje.push(3); break;
+        case 2: puntaje.push(5); break;
+        case 3: puntaje.push(3); break;
+    }
 }
 
 function respuestaCorrecta() {
@@ -237,8 +267,14 @@ function respuestaCorrecta() {
         boton.disabled = true;
     }
 
-    this.style.backgroundColor = "green";
+    paisesEnUso = [];
+    this.style["backgroundColor"] = "green";
     sinContestar = false;
+
+    tiempo = (Date.now() - tiempo) / 1000;
+    tiempo = (tiempo.toFixed(2)) * 1;
+    tiempos.push(tiempo);
+    puntuar();
 }
 
 function respuestaIncorrecta() {
@@ -246,6 +282,22 @@ function respuestaIncorrecta() {
         boton.disabled = true;
     }
 
-    this.style.backgroundColor = "red";
+    for (let i=0; i<paisesEnUso.length; i++) {
+        const boton = interfaz.divRespuestas.childNodes[i];
+
+        if (paisesEnUso[i].seleccionado) {
+            boton.style["backgroundColor"] = "green";
+        }
+    }
+
+    paisesEnUso = [];
+    this.style["backgroundColor"] = "red";
     sinContestar = false;
+
+    tiempo = (Date.now() - tiempo) / 1000;
+    tiempo = (tiempo.toFixed(2)) * 1;
+    tiempos.push(tiempo);
+    puntaje.push(0);
 }
+
+// #endregion

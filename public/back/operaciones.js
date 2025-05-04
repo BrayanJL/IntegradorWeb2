@@ -1,40 +1,57 @@
 import path from "path";
 import fs from "fs";
 
-export function ejecutarOperacionGet(operacion) {
+export function ejecutarOperacionGet(operacion, datos) {
     switch (operacion) {
-
+        case "obtenerResultados": obtenerResultados(datos); break;
+        case "obtenerRanking": obtenerRanking(datos); break;
+        default: throw Error("Operación(GET) Desconocida");
     }
 };
 
 export function ejecutarOperacionPost(operacion, datos) {
     switch (operacion) {
-        case "guardarNombre": guardarNombre(datos); break;
-        default: throw Error("Operación Desconocida");
+        case "guardarResultados": guardarResultados(datos); break;
+        case "guardarRanking": guardarRanking(datos); break;
+        default: throw Error("Operación(POST) Desconocida");
     }
 };
 
 // OPERACION GET:
 
-function obtenerDatosDelJugador (datos) {
-
+async function obtenerResultados(datos) {
+    return await fetch("partida.json").
+     then((r) => r.json()). 
+     then((r) => r). 
+     catch((err) => console.log(err))
+    ;
 };
+
+async function obtenerRanking(datos) {
+    return await fetch("ranking.json").
+     then((r) => r.json()). 
+     then((r) => r). 
+     catch((err) => console.log(err))
+    ;
+}
+
 
 // OPERACION POST:
 
-function guardarNombre (datos) {
+function guardarResultados(datos) {
     const ruta = path.join(process.cwd(), "public", "back");
-    const nombreArchivo = path.join(ruta, "jugadorActual.json");
-    const nombre = {nombre: datos["nombre"]};
+    const nombreArchivo = path.join(ruta, "partida.json");
 
-    console.log(ruta);
-
-    fs.writeFile(nombreArchivo , JSON.stringify(nombre), (err) => {
+    fs.writeFile(nombreArchivo , JSON.stringify(datos), (err) => {
         if (err) {
-            throw Error("Error al guardar el nombre del jugador");
+            throw Error("Error al guardar resultados");
         }
         else {
-            console.log("Nombre del jugador guardado con éxito");
+            console.log("Resultados guardados con éxito");
         }
     })
-};
+}
+
+function guardarRanking(datos) {
+    
+}

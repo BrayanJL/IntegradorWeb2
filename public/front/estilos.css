@@ -13,6 +13,7 @@
     background-color:orange;
     border-radius: 50px;
     height: 30px;
+    margin-top: 10px;
     margin-left: 10px;
     margin-right: 10px;
 }
@@ -28,4 +29,26 @@
     background-color: darkblue;
     color: #ffffff;
     border-radius: 50px;
+}
+
+.tabla {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: large;
+    background-color: rgb(8, 125, 172);
+}
+
+.celdas {
+    text-align: center;
+    width: 200px;
+    font-size: large;
+    background-color: lightblue;
+}
+
+.totales {
+    text-align: center;
+    width: 200px;
+    font-size: large;
+    background-color: lightseagreen;
 }

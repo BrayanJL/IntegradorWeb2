@@ -27,8 +27,6 @@ app.post("/", (req, res) => {
     const datos = req.body
     const operacion = req.headers["operacion"];
 
-    console.log(operacion);
-
     if (!!operacion === false) {
         throw Error("Operación Inexistente");
     } else {
