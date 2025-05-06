@@ -4,7 +4,7 @@ import express from "express";
 import path from "path";
 
 const app = express();
-const puerto = 3000;
+const puerto = process.env.PORT || 3000;
 const front = path.join(process.cwd(), "public", "front");
 const back = path.join(process.cwd(), "public", "back");
 
@@ -28,7 +28,7 @@ app.post("/", (req, res) => {
     const operacion = req.headers["operacion"];
 
     if (!!operacion === false) {
-        throw Error("Operación Inexistente");
+        return res.status(400).send("Operación inexistente");
     } else {
         const archivo = ejecutarOperacionPost(operacion, datos);
         res.sendFile(archivo);
