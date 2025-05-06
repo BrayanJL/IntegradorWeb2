@@ -3,9 +3,13 @@ import fs from "fs";
 
 const resultados = path.join(process.cwd(), "public", "back", "partida.json");
 const ranking = path.join(process.cwd(), "public", "back", "ranking.json");
+const repuestos = path.join(process.cwd(), "public", "back", "DatosDeRepuesto");
 
-export function ejecutarOperacionGet(operacion) {
+export function ejecutarOperacionGet(cabecera) {
+    const operacion = cabecera["operacion"];
+
     switch (operacion) {
+        case "obtenerRepuesto": return obtenerRepuesto(cabecera); break;
         case "obtenerResultados": return obtenerResultados(); break;
         case "obtenerRanking": return obtenerRanking(); break;
         default: throw Error("Operación(GET) Desconocida");
@@ -21,6 +25,13 @@ export function ejecutarOperacionPost(operacion, datos) {
 };
 
 // OPERACIONS GET
+
+function obtenerRepuesto(cabecera) {
+    const archivo = cabecera["subregion"].replaceAll(" ","_")+".json";
+    const ruta = path.join(repuestos, archivo);
+
+    return ruta;
+}
 
 function obtenerResultados() {
     try {

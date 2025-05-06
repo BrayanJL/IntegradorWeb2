@@ -11,13 +11,14 @@ const back = path.join(process.cwd(), "public", "back");
 app.use(express.json()); 
 
 app.get("/", (req, res) => {
-    const operacion = req.headers["operacion"];
+    const cabecera = req.headers;
+    const operacion = cabecera["operacion"];
 
     if (!!operacion === false) {
         const archivo = path.join(front, "index.html");
         res.sendFile(archivo);
     } else {
-        const archivo = ejecutarOperacionGet(operacion);
+        const archivo = ejecutarOperacionGet(cabecera);
         res.sendFile(archivo);
     }
 })

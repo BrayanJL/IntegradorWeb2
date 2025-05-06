@@ -1,3 +1,17 @@
+export async function obtenerRepuesto (operacion, subregion, cantidadDeOpciones) {
+    const url = "http://localhost:3000/";
+
+    const datos = await fetch(url, {
+        method: "GET",
+        headers: {
+            "Operacion": operacion,
+            "subregion": subregion,
+            "Content-Type": "application/json"
+        },
+    });
+
+    return datos.json();
+}
 
 export async function obtenerDatos (operacion) {
     const url = "http://localhost:3000/";

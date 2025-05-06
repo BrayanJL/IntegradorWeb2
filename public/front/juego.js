@@ -1,4 +1,5 @@
 import {crearInterfazDeJuego} from "./interfaces.js";
+import {obtenerRepuesto} from "./peticiones.js";
 import {mostrarResultados} from "./resultadosFront.js";
 
 let interfaz;
@@ -22,9 +23,10 @@ export function empezarPartida(nombreJugador) {
     interfaz.siguiente.addEventListener("click", preguntar);
 }
 
-export function prepararPartida() {
+export async function prepararPartida() {
     const subregiones = seleccionarSubRegiones(cantidadDePreguntas);
-    obtenerPaises(subregiones);
+    await obtenerPaises(subregiones);
+    return paisesEnUso;
 }
 
 function preguntar() {
@@ -80,34 +82,47 @@ function *obtenerTipoDePregunta() {
     };
 };
 
-function obtenerPaises (subregiones) {
+async function obtenerPaises (subregiones) {
     const url = "https://restcountries.com/v3.1/subregion/";
     const cantidadDeOpciones = 4;
 
-    subregiones.forEach((sg) => {
-        fetch(url+sg).
+    for (const sg of subregiones) {
+        await fetch(url+sg).
          then((res) => res.json()). 
          then((listaDePaises) => {
-            const paises = [];
-            let paisSeleccionado;
-
-            for (let i=0; i<cantidadDeOpciones; i++) {
-                const indiceRandom = Math.round(Math.random() * (listaDePaises.length-1));
-                const pais = listaDePaises.splice(indiceRandom, 1)[0];
-
-                if (!paisSeleccionado) {
-                    if (pais.capital !== undefined && pais.flags?.svg !== undefined) {
-                        paisSeleccionado = pais;
-                        pais.seleccionado = true;
-                        paises.push(pais);
-                    }
-                } else paises.unshift(pais);
-
-                if (i === cantidadDeOpciones-1) {
-                    paisesOpcion.push(paises);
-                } 
-            }
+            seleccionarPaises(listaDePaises, cantidadDeOpciones);
+        }).catch(() => {
+            const paisesDeRepuesto = obtenerRepuesto("obtenerRepuesto", sg);
+            seleccionarPaisesRepuesto(paisesDeRepuesto, cantidadDeOpciones);
         })
+    }
+}
+
+function seleccionarPaises(listaDePaises, cantidadDeOpciones) {
+    const paises = [];
+    let paisSeleccionado;
+
+    for (let i=0; i<cantidadDeOpciones; i++) {
+        const indiceRandom = Math.round(Math.random() * (listaDePaises.length-1));
+        const pais = listaDePaises.splice(indiceRandom, 1)[0];
+
+        if (!paisSeleccionado) {
+            if (pais.capital !== undefined && pais.flags?.svg !== undefined) {
+                paisSeleccionado = pais;
+                pais.seleccionado = true;
+                paises.push(pais);
+            }
+        } else paises.unshift(pais);
+
+        if (i === cantidadDeOpciones-1) {
+            paisesOpcion.push(paises);
+        } 
+    }
+}
+
+function seleccionarPaisesRepuesto(paisesRepuesto, cantidadDeOpciones) {
+    paisesRepuesto.then((listaDePaises) => {
+        seleccionarPaises(listaDePaises, cantidadDeOpciones);
     })
 }
 

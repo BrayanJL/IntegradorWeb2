@@ -1,4 +1,3 @@
-
 const menu = document.querySelector(".menu");
 const cabecera = document.querySelector(".cabecera");
 const contenido = document.querySelector(".contenidoPrincipal");
@@ -330,6 +329,17 @@ function cargarBotonesDeTablaRanking() {
 
 // #endregion
 
+export function crearInterfazDeCarga() {
+    reestablecerMenu();
+    cargarInterfazDeCarga();
+}
+
+function cargarInterfazDeCarga() {
+    const titulo = document.createElement("h1");
+    titulo.textContent = "Cargando preguntas...";
+    cabecera.appendChild(titulo);
+    menu.style.display = "block";
+}
 
 function reestablecerMenu() {
     menu.style.display = "none";

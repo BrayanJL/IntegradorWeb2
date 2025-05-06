@@ -23,11 +23,9 @@ function cargarPosiciones(listaDeFilas) {
 async function prepararRanking(listaDeFilas) {
     const resultados = await obtenerDatos("obtenerResultados");
     let ranking = await actualizarRanking (resultados);
+
     ranking = ordenarRanking(ranking);
     cargarTabla(ranking, listaDeFilas);
-
-    console.log(resultados);
-    console.log(ranking);
 }
 
 async function actualizarRanking (resultados) {
@@ -62,7 +60,13 @@ function ordenarRanking(ranking) {
 }
 
 function cargarTabla (ranking, listaDeFilas) {
-    for (let i=0; i<listaDeFilas.length; i++) {
+    let cantidadDeFilas;
+
+    if (ranking.length < listaDeFilas.length) {
+        cantidadDeFilas = ranking.length;
+    } else cantidadDeFilas = listaDeFilas.length;
+
+    for (let i=0; i<cantidadDeFilas; i++) {
         const filaRanking = ranking[i];
         const filaInterfaz = listaDeFilas[i];
         cargarFila (filaRanking, filaInterfaz);
