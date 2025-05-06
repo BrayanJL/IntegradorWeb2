@@ -1,19 +1,17 @@
 import {crearInterfazDeJuego} from "./interfaces.js";
 import {mostrarResultados} from "./resultadosFront.js";
 
-const preguntas = obtenerPreguntas();
-const cantidadDePreguntas = 10;
-const paisesOpcion = [];
-
-let interfaz = {};
-let paisesEnUso = [];
-let sinContestar = false; 
+let interfaz;
+let preguntas = obtenerPreguntas();
+let cantidadDePreguntas = 10;
 let tipoDePregunta;
-
+let paisesOpcion = [];
+let paisesEnUso = [];
 let puntaje = [];
 let tiempos = [];
 let tiempo;
 let nombre;
+let sinContestar = false; 
 
 // #region FUNCIONES PRINCIPALES
 
@@ -36,8 +34,20 @@ function preguntar() {
 
         if (pregunta.done) {
             mostrarResultados(nombre, tiempos, puntaje);
+            restablecerPartida();
         };
     };
+}
+
+function restablecerPartida() {
+    preguntas = obtenerPreguntas();
+    paisesOpcion = [];
+    paisesEnUso = [];
+    puntaje = [];
+    tiempos = [];
+    sinContestar = false;
+
+    interfaz.siguiente.removeEventListener("click", preguntar);
 }
 
 // #endregion
@@ -79,19 +89,23 @@ function obtenerPaises (subregiones) {
          then((res) => res.json()). 
          then((listaDePaises) => {
             const paises = [];
+            let paisSeleccionado;
 
             for (let i=0; i<cantidadDeOpciones; i++) {
                 const indiceRandom = Math.round(Math.random() * (listaDePaises.length-1));
                 const pais = listaDePaises.splice(indiceRandom, 1)[0];
 
-                if (i === cantidadDeOpciones-1) {
-                    pais.seleccionado = true;
-                    paises.push(pais);
-                    paisesOpcion.push(paises);
+                if (!paisSeleccionado) {
+                    if (pais.capital !== undefined && pais.flags?.svg !== undefined) {
+                        paisSeleccionado = pais;
+                        pais.seleccionado = true;
+                        paises.push(pais);
+                    }
+                } else paises.unshift(pais);
 
-                } else {
-                    paises.push(pais);
-                }
+                if (i === cantidadDeOpciones-1) {
+                    paisesOpcion.push(paises);
+                } 
             }
         })
     })

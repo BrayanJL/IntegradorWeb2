@@ -1,57 +1,52 @@
 import path from "path";
 import fs from "fs";
 
-export function ejecutarOperacionGet(operacion, datos) {
+const resultados = path.join(process.cwd(), "public", "back", "partida.json");
+const ranking = path.join(process.cwd(), "public", "back", "ranking.json");
+
+export function ejecutarOperacionGet(operacion) {
     switch (operacion) {
-        case "obtenerResultados": obtenerResultados(datos); break;
-        case "obtenerRanking": obtenerRanking(datos); break;
+        case "obtenerResultados": return obtenerResultados(); break;
+        case "obtenerRanking": return obtenerRanking(); break;
         default: throw Error("Operación(GET) Desconocida");
     }
-};
+}
 
 export function ejecutarOperacionPost(operacion, datos) {
     switch (operacion) {
-        case "guardarResultados": guardarResultados(datos); break;
-        case "guardarRanking": guardarRanking(datos); break;
+        case "guardarResultados": return guardarDatos (operacion, datos, resultados); break;
+        case "guardarRanking": return guardarDatos (operacion, datos, ranking); break;
         default: throw Error("Operación(POST) Desconocida");
     }
 };
 
-// OPERACION GET:
+// OPERACIONS GET
 
-async function obtenerResultados(datos) {
-    return await fetch("partida.json").
-     then((r) => r.json()). 
-     then((r) => r). 
-     catch((err) => console.log(err))
-    ;
-};
+function obtenerResultados() {
+    try {
+        fs.readFileSync(resultados, "utf-8");
+    }
+    catch (err) {
+        fs.writeFileSync(resultados, JSON.stringify({vacio: true}), "utf8");
+    }
 
-async function obtenerRanking(datos) {
-    return await fetch("ranking.json").
-     then((r) => r.json()). 
-     then((r) => r). 
-     catch((err) => console.log(err))
-    ;
+    return resultados;
 }
 
+function obtenerRanking() {
+    try {
+        fs.readFileSync(ranking, "utf-8");
+    }
+    catch (err) {
+        fs.writeFileSync(ranking, JSON.stringify([]), "utf8");
+    }
 
-// OPERACION POST:
-
-function guardarResultados(datos) {
-    const ruta = path.join(process.cwd(), "public", "back");
-    const nombreArchivo = path.join(ruta, "partida.json");
-
-    fs.writeFile(nombreArchivo , JSON.stringify(datos), (err) => {
-        if (err) {
-            throw Error("Error al guardar resultados");
-        }
-        else {
-            console.log("Resultados guardados con éxito");
-        }
-    })
+    return ranking;
 }
 
-function guardarRanking(datos) {
-    
+// OPERACIONES POST
+
+function guardarDatos (operacion, datos, ruta) {
+    fs.writeFileSync(ruta, JSON.stringify(datos), "utf8");
+    return ruta;
 }

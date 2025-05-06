@@ -129,12 +129,15 @@ function cargarInterfazDeJuego() {
 
 export function crearInterfazDeResultados() {
     reestablecerMenu();
+
     const tabla = cargarTablaResultados();
     const interfaz = {};
+    const filas = 10;
+    const celdas = 5;
 
-    interfaz.listaDeFilas = cargarContenidoDeTablaResultados(tabla),
-    interfaz.totales = cargarFooterTablaResultados(tabla),
-    interfaz.botonVolver = cargarBotonVolverAInicio();
+    interfaz.listaDeFilas = cargarContenidoDeTabla (tabla, filas, celdas),
+    interfaz.totales = cargarFooterTablaResultados(tabla);
+    interfaz.botones = cargarBotonesDeTablaResultados();
 
     menu.style.display = "block";
     return interfaz;
@@ -187,26 +190,6 @@ function cargarCabeceraDeTablaResultados (tabla) {
     tabla.appendChild(cabeceraTabla);
 }
 
-function cargarContenidoDeTablaResultados (tabla) {
-    const listaDeFilas = [];
-    const filas = 10;
-    const celdas = 5;
-
-    for (let i=0; i<filas; i++) {
-        const fila = document.createElement("tr");
-        tabla.appendChild(fila);
-        listaDeFilas.push(fila);
-
-        for (let j=0; j<celdas; j++) {
-            const celda = document.createElement("td");
-            celda.classList.add("celdas");
-            fila.appendChild(celda);
-        }
-    }
-
-    return listaDeFilas;
-}
-
 function cargarFooterTablaResultados (tabla) {
     const footerTabla = document.createElement("tfoot");
     const totales = cargarTotales(footerTabla);
@@ -246,27 +229,104 @@ function cargarTotales (footerTabla) {
     };
 }
 
-function cargarBotonVolverAInicio() {
+function cargarBotonesDeTablaResultados() {
     const divBotones = document.createElement("div");
     const botonVolver = document.createElement("button");
+    const botonRanking = document.createElement("button");
 
-    botonVolver.textContent = "Volver al menú de inicio";
+    botonVolver.textContent = "Volver al inicio";
+    botonRanking.textContent = "Ver ranking";
+
     botonVolver.classList.add("botones");
+    botonRanking.classList.add("botones");
 
     divBotones.appendChild(botonVolver);
+    divBotones.appendChild(botonRanking);
+
     contenido.appendChild(divBotones);
 
-    return botonVolver;
+    return {
+        botonVolver,
+        botonRanking
+    };
 }
 
 // #endregion
 
 // #region Ranking
 
-// Sin hacer todavía.
 export function crearInterfazDeRanking() {
     reestablecerMenu();
+
+    const tabla = cargarTablaRanking();
+    const interfaz = {};
+    const filas = 20;
+    const celdas = 4;
+
+    interfaz.listaDeFilas = cargarContenidoDeTabla (tabla, filas, celdas),
+    interfaz.botones = cargarBotonesDeTablaRanking();
+
+    menu.style.display = "block";
+    return interfaz;
 };
+
+function cargarTablaRanking() {
+    const tabla = document.createElement("table");
+    const titulo = document.createElement("caption");
+
+    titulo.textContent = "RANKING DE JUGADORES";
+    titulo.style.background = "black";
+    titulo.style.color = "orange";
+
+    tabla.classList.add("tabla");
+
+    tabla.appendChild(titulo);
+    contenido.appendChild(tabla);
+
+    cargarCabeceraDeTablaRanking(tabla);
+
+    return tabla;
+}
+
+function cargarCabeceraDeTablaRanking (tabla) {
+    const cabeceraTabla = document.createElement("thead");
+    const posicion = document.createElement("th");
+    const nombre = document.createElement("th");
+    const tiempo = document.createElement("th");
+    const puntaje = document.createElement("th");
+
+    posicion.textContent = "Posición";
+    nombre.textContent = "Nombre del jugador";
+    tiempo.textContent = "Tiempo";
+    puntaje.textContent = "Puntaje";
+
+    posicion.classList.add("celdas");
+    nombre.classList.add("celdas");
+    tiempo.classList.add("celdas");
+    puntaje.classList.add("celdas");
+
+    cabeceraTabla.appendChild(posicion);
+    cabeceraTabla.appendChild(nombre);
+    cabeceraTabla.appendChild(tiempo);
+    cabeceraTabla.appendChild(puntaje);
+
+    tabla.appendChild(cabeceraTabla);
+}
+
+function cargarBotonesDeTablaRanking() {
+    const divBotones = document.createElement("div");
+    const botonVolver = document.createElement("button");
+
+    botonVolver.textContent = "Volver al inicio";
+    botonVolver.classList.add("botones");
+    divBotones.appendChild(botonVolver);
+
+    contenido.appendChild(divBotones);
+
+    return {
+        botonVolver,
+    };
+}
 
 // #endregion
 
@@ -281,3 +341,21 @@ function reestablecerMenu() {
         contenido.firstChild.remove();
     };
 };
+
+function cargarContenidoDeTabla (tabla, filas, celdas) {
+    const listaDeFilas = [];
+
+    for (let i=0; i<filas; i++) {
+        const fila = document.createElement("tr");
+        tabla.appendChild(fila);
+        listaDeFilas.push(fila);
+
+        for (let j=0; j<celdas; j++) {
+            const celda = document.createElement("td");
+            celda.classList.add("celdas");
+            fila.appendChild(celda);
+        }
+    }
+
+    return listaDeFilas;
+}

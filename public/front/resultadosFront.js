@@ -1,35 +1,34 @@
 import {crearInterfazDeResultados} from "./interfaces.js";
+import {iniciar} from "./inicio.js";
+import {verRanking} from "./rankingFront.js";
+import {guardarResultados} from "./peticiones.js";
 
-let respuestasCorrectas = 0;
-let respuestasIncorrectas = 0;
+let respuestasCorrectas;
+let respuestasIncorrectas;
 let tiempoTotal;
 let puntajeTotal;
 
 export function mostrarResultados (nombre, tiempos, puntaje) {
     const interfaz = crearInterfazDeResultados();
+    const volver = interfaz.botones.botonVolver;
+    const ranking = interfaz.botones.botonRanking;
 
-    tiempoTotal = tiempos.reduce((tiempoTotal, tiempo) => tiempoTotal+=tiempo);
-    puntajeTotal = puntaje.reduce((puntaje, puntos) => puntaje+=puntos);
+    volver.addEventListener("click", () => iniciar());
+    ranking.addEventListener("click", () => verRanking());
 
+    respuestasCorrectas = 0;
+    respuestasIncorrectas = 0;
+
+    calcularTotales(tiempos, puntaje);
     cargarTabla(interfaz, tiempos, puntaje);
-    guardarResultados(nombre);
-
-    console.log(tiempoTotal);
+    guardarResultados(nombre, tiempoTotal, puntajeTotal);
 };
 
-function guardarResultados (nombre) {
-    fetch("http://localhost:3000/", {
-        method: 'POST',
-        headers: {
-            "Operacion": "guardarResultados",
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            nombre: nombre,
-            tiempo: tiempoTotal,
-            puntaje: puntajeTotal
-        })
-    })
+function calcularTotales (tiempos, puntaje) {
+    tiempoTotal = tiempos.reduce((tiempoTotal, tiempo) => tiempoTotal+=tiempo);
+    puntajeTotal = puntaje.reduce((puntaje, puntos) => puntaje+=puntos);
+    
+    tiempoTotal = tiempoTotal.toFixed(2);
 }
 
 function cargarTabla (interfaz, tiempos, puntaje) {
@@ -96,4 +95,4 @@ function cargarTotales (totales) {
     tpi.textContent = respuestasIncorrectas;
     totalPuntaje.textContent = puntajeTotal;
     totalTiempos.textContent = tiempoTotal+"s";
-}  
+}

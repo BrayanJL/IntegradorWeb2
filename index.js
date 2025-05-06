@@ -5,23 +5,22 @@ import path from "path";
 
 const app = express();
 const puerto = 3000;
-const front = path.join(process.cwd(), 'public', 'front');
-const back = path.join(process.cwd(), 'public', 'back');
+const front = path.join(process.cwd(), "public", "front");
+const back = path.join(process.cwd(), "public", "back");
 
-app.use(express.static(front));
-app.use(express.static(back));
 app.use(express.json()); 
 
-
 app.get("/", (req, res) => {
-    const operacion = req.headers["Operacion"];
+    const operacion = req.headers["operacion"];
 
     if (!!operacion === false) {
-        res.sendFile(path.join(front, "index.html"));
+        const archivo = path.join(front, "index.html");
+        res.sendFile(archivo);
     } else {
-        
+        const archivo = ejecutarOperacionGet(operacion);
+        res.sendFile(archivo);
     }
-});
+})
 
 app.post("/", (req, res) => {
     const datos = req.body
@@ -30,9 +29,13 @@ app.post("/", (req, res) => {
     if (!!operacion === false) {
         throw Error("Operación Inexistente");
     } else {
-        ejecutarOperacionPost(operacion, datos);
+        const archivo = ejecutarOperacionPost(operacion, datos);
+        res.sendFile(archivo);
     }
 });
+
+app.use(express.static(front));
+app.use(express.static(back));
 
 app.listen(puerto, () => {
     console.log(`Escuchando en el puerto ${puerto}`);
