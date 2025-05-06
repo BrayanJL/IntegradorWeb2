@@ -1,6 +1,8 @@
-import {crearInterfazDeJuego} from "./interfaces.js";
+import {crearInterfazDeJuego, crearInterfazDeCarga} from "./interfaces.js";
 import {obtenerRepuesto} from "./peticiones.js";
 import {mostrarResultados} from "./resultadosFront.js";
+
+let recargable = "true";
 
 let interfaz;
 let preguntas = obtenerPreguntas();
@@ -24,9 +26,13 @@ export function empezarPartida(nombreJugador) {
 }
 
 export async function prepararPartida() {
-    const subregiones = seleccionarSubRegiones(cantidadDePreguntas);
-    await obtenerPaises(subregiones);
-    return paisesEnUso;
+    if (recargable) {
+        recargable = false;
+        
+        crearInterfazDeCarga();
+        const subregiones = seleccionarSubRegiones(cantidadDePreguntas);
+        await obtenerPaises(subregiones);
+    }
 }
 
 function preguntar() {
@@ -42,6 +48,8 @@ function preguntar() {
 }
 
 function restablecerPartida() {
+    recargable = true;
+
     preguntas = obtenerPreguntas();
     paisesOpcion = [];
     paisesEnUso = [];

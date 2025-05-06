@@ -1,6 +1,7 @@
-export async function obtenerRepuesto (operacion, subregion, cantidadDeOpciones) {
-    const url = "http://localhost:3000/";
 
+const url = "https://integradorweb2-uwe2.onrender.com/";
+
+export async function obtenerRepuesto (operacion, subregion, cantidadDeOpciones) {
     const datos = await fetch(url, {
         method: "GET",
         headers: {
@@ -14,8 +15,6 @@ export async function obtenerRepuesto (operacion, subregion, cantidadDeOpciones)
 }
 
 export async function obtenerDatos (operacion) {
-    const url = "http://localhost:3000/";
-
     const datos = await fetch(url, {
         method: "GET",
         headers: {
@@ -28,8 +27,6 @@ export async function obtenerDatos (operacion) {
 }
 
 export async function guardarResultados (nombre, tiempoTotal, puntajeTotal) {
-    const url = "http://localhost:3000/";
-
     const datos = await fetch (url, {
         method: "POST",
         headers: {
@@ -48,8 +45,6 @@ export async function guardarResultados (nombre, tiempoTotal, puntajeTotal) {
 }
 
 export async function guardarRanking (ranking) {
-    const url = "http://localhost:3000/";
-
     const datos = await fetch (url, {
         method: "POST",
         headers: {
