@@ -260,7 +260,7 @@ export function crearInterfazDeRanking() {
     const tabla = cargarTablaRanking();
     const interfaz = {};
     const filas = 20;
-    const celdas = 4;
+    const celdas = 5;
 
     interfaz.listaDeFilas = cargarContenidoDeTabla (tabla, filas, celdas),
     interfaz.botones = cargarBotonesDeTablaRanking();
@@ -291,21 +291,25 @@ function cargarCabeceraDeTablaRanking (tabla) {
     const cabeceraTabla = document.createElement("thead");
     const posicion = document.createElement("th");
     const nombre = document.createElement("th");
+    const respuestas = document.createElement("th");
     const tiempo = document.createElement("th");
     const puntaje = document.createElement("th");
 
     posicion.textContent = "Posición";
     nombre.textContent = "Nombre del jugador";
+    respuestas.textContent = "Respuestas Correctas";
     tiempo.textContent = "Tiempo";
     puntaje.textContent = "Puntaje";
 
     posicion.classList.add("celdas");
     nombre.classList.add("celdas");
+    respuestas.classList.add("celdas");
     tiempo.classList.add("celdas");
     puntaje.classList.add("celdas");
 
     cabeceraTabla.appendChild(posicion);
     cabeceraTabla.appendChild(nombre);
+    cabeceraTabla.appendChild(respuestas);
     cabeceraTabla.appendChild(tiempo);
     cabeceraTabla.appendChild(puntaje);
 
@@ -329,6 +333,8 @@ function cargarBotonesDeTablaRanking() {
 
 // #endregion
 
+// #region Pantalla de carga
+
 export function crearInterfazDeCarga() {
     reestablecerMenu();
     cargarInterfazDeCarga();
@@ -340,6 +346,8 @@ function cargarInterfazDeCarga() {
     cabecera.appendChild(titulo);
     menu.style.display = "block";
 }
+
+// #endregion
 
 function reestablecerMenu() {
     menu.style.display = "none";

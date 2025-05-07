@@ -21,7 +21,7 @@ export function mostrarResultados (nombre, tiempos, puntaje) {
 
     calcularTotales(tiempos, puntaje);
     cargarTabla(interfaz, tiempos, puntaje);
-    guardarResultados(nombre, tiempoTotal, puntajeTotal);
+    guardarResultados(nombre, respuestasCorrectas, tiempoTotal, puntajeTotal);
 };
 
 function calcularTotales (tiempos, puntaje) {

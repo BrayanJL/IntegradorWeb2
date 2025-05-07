@@ -55,7 +55,11 @@ function ordenarRanking(ranking) {
     return ranking.sort((a,b) => {
         if (a.puntaje !== b.puntaje) {
             return (b.puntaje - a.puntaje);
-        } else return (a.tiempo - b.tiempo)
+        } else {
+            if (a.respuestas !== b.respuestas) {
+               return (b.respuestas - a.respuestas);
+            } else return (a.tiempo - b.tiempo);
+        }
     });
 }
 
@@ -75,10 +79,12 @@ function cargarTabla (ranking, listaDeFilas) {
 
 function cargarFila (filaRanking, filaInterfaz) {
     const celdaNombre = filaInterfaz.childNodes[1];
-    const celdaTiempo = filaInterfaz.childNodes[2];
-    const celdaPuntaje = filaInterfaz.childNodes[3];
+    const celdaRespuestas = filaInterfaz.childNodes[2];
+    const celdaTiempo = filaInterfaz.childNodes[3];
+    const celdaPuntaje = filaInterfaz.childNodes[4];
 
     celdaNombre.textContent = filaRanking.nombre;
+    celdaRespuestas.textContent = filaRanking.respuestas;
     celdaTiempo.textContent = filaRanking.tiempo;
     celdaPuntaje.textContent = filaRanking.puntaje;
 }

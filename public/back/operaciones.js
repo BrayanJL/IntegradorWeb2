@@ -18,8 +18,8 @@ export function ejecutarOperacionGet(cabecera) {
 
 export function ejecutarOperacionPost(operacion, datos) {
     switch (operacion) {
-        case "guardarResultados": return guardarDatos (operacion, datos, resultados); break;
-        case "guardarRanking": return guardarDatos (operacion, datos, ranking); break;
+        case "guardarResultados": return guardarDatos (datos, resultados); break;
+        case "guardarRanking": return guardarDatos (datos, ranking); break;
         default: throw Error("Operación(POST) Desconocida");
     }
 };
@@ -57,7 +57,7 @@ function obtenerRanking() {
 
 // OPERACIONES POST
 
-function guardarDatos (operacion, datos, ruta) {
+function guardarDatos (datos, ruta) {
     fs.writeFileSync(ruta, JSON.stringify(datos), "utf8");
     return ruta;
 }
