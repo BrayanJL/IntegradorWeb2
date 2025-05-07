@@ -32,7 +32,7 @@ Aquí aparecerán las preguntas en la pantalla una a la vez hasta que se respond
 Una ves respondidas las 10 preguntas se cargara la interfaz de resultados de la partida.
 
 Interfaz de resultados de la partida:
-Está muestra una tabla con los respuestas correctas, incorrectas, el tiempo tardado por pregunta, el puntaje sumado por pregunta
+Está muestra una tabla con los respuestas correctas, incorrectas, el tiempo tardado por pregunta, el puntaje sumado por pregunta.
 También las respuestas correctas e incorrectas totales, el tiempo tardado en responder todas las preguntas y el puntaje acumulado.
 Además, desde esta interfaz se podra ir devuelta a la interfaz de inicio y a la interfaz del ranking de jugadores.
 
